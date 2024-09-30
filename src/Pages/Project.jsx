@@ -13,7 +13,7 @@ const Project = () => {
 
   const fetchDefaultMovies = async () => {
     // Example: fetching trending/popular movies, or simply pre-fill with a default search
-    const url = `http://www.omdbapi.com/?s=Batman&apikey=ea336f97`; // Default query for popular movies
+    const url = `https://www.omdbapi.com/?s=Batman&apikey=ea336f97`; // Default query for popular movies
 
     try {
       const response = await fetch(url);
@@ -31,7 +31,7 @@ const Project = () => {
   const fetchMovies = async () => {
     if (!search) return; // Exit if no search term
 
-    const url = `http://www.omdbapi.com/?s=${search}&apikey=ea336f97`;
+    const url = `https://www.omdbapi.com/?s=${search}&apikey=ea336f97`;
 
     try {
       const response = await fetch(url);
@@ -48,7 +48,7 @@ const Project = () => {
   };
 
   const fetchMovieDetails = async (movieId) => {
-    const url = `http://www.omdbapi.com/?i=${movieId}&apikey=ea336f97`;
+    const url = `https://www.omdbapi.com/?i=${movieId}&apikey=ea336f97`;
 
     try {
       const response = await fetch(url);
