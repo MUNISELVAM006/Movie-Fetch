@@ -13,7 +13,7 @@ const Project = () => {
 
   const fetchDefaultMovies = async () => {
     // Example: fetching trending/popular movies, or simply pre-fill with a default search
-    const url = `https://www.omdbapi.com/?s=Batman&apikey=ea336f97`; // Default query for popular movies
+    const url = `https://www.omdbapi.com/?s=batman&apikey=ea336f97`; // Default query for popular movies
 
     try {
       const response = await fetch(url);
