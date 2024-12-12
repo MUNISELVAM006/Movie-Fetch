@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 
 const Project = () => {
@@ -5,23 +6,20 @@ const Project = () => {
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
-  // Fetch movies when the home page loads
   useEffect(() => {
     fetchDefaultMovies();
-    // console.log("renter") // Fetch default movie list
   }, []);
 
   const fetchDefaultMovies = async () => {
-    // Example: fetching trending/popular movies, or simply pre-fill with a default search
-    const url = `https://www.omdbapi.com/?s=batman&apikey=ea336f97`; // Default query for popular movies
+    const url = `https://www.omdbapi.com/?s=batman&apikey=ea336f97`;
 
     try {
       const response = await fetch(url);
       const data = await response.json();
       if (data.Response === "True") {
-        setMovies(data.Search.slice(0, 10)); // Show only the first 10 movies
+        setMovies(data.Search.slice(0, 10));
       } else {
-        setMovies([]); // Clear movies if no results
+        setMovies([]);
       }
     } catch (err) {
       console.error('Error fetching default movies:', err);
@@ -29,7 +27,7 @@ const Project = () => {
   };
 
   const fetchMovies = async () => {
-    if (!search) return; // Exit if no search term
+    if (!search) return;
 
     const url = `https://www.omdbapi.com/?s=${search}&apikey=ea336f97`;
 
@@ -38,9 +36,9 @@ const Project = () => {
       const data = await response.json();
       if (data.Response === "True") {
         setMovies(data.Search);
-        setSearch(""); // Clear search input after the search
+        setSearch("");
       } else {
-        setMovies([]); // Clear movies if no results
+        setMovies([]);
       }
     } catch (err) {
       console.error('Error fetching data:', err);
@@ -53,72 +51,74 @@ const Project = () => {
     try {
       const response = await fetch(url);
       const data = await response.json();
-      setSelectedMovie(data); // Save the selected movie details
+      setSelectedMovie(data);
     } catch (err) {
       console.error('Error fetching movie details:', err);
     }
   };
 
   const handlePosterClick = (movie) => {
-    fetchMovieDetails(movie.imdbID); // Fetch detailed info for the clicked movie
+    fetchMovieDetails(movie.imdbID);
   };
 
   return (
-    <div>
-      <div className='bg'>
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center">
+      {/* Search Section */}
+      <div className="w-full max-w-3xl p-4 flex flex-col md:flex-row md:items-center md:justify-between bg-gray-800 text-white">
         <input
-          className='input'
-          placeholder='Enter a movie'
+          className="w-full md:w-2/3 flex-1 p-2 rounded-md text-white bg-gray-900"
+          placeholder="Enter a movie"
           type="text"
           onChange={(e) => setSearch(e.target.value)}
           value={search}
         />
-        <button className='search' onClick={fetchMovies}>Search</button>
+        <button
+          className="mt-2  md:mt-0 md:ml-2 p-2 bg-orange-500 hover:bg-orange-600 text-white rounded-md"
+          onClick={fetchMovies}
+        >
+          Search
+        </button>
       </div>
 
-      {/* Carousel-like display for the selected movie */}
+      {/* Selected Movie Details */}
       {selectedMovie && (
-        <div className="carousel">
+        <div className="w-full max-w-3xl bg-white rounded-lg shadow-md mt-4 p-4 flex flex-col lg:flex-row lg:items-center">
           <img
-            className="carousel-poster"
+            className="w-32 h-48 lg:w-48 lg:h-64 rounded-lg"
             src={selectedMovie.Poster}
             alt={selectedMovie.Title}
           />
-          <div className="carousel-info">
-            <h2 className="carousel-h">{selectedMovie.Title}</h2>
-            <p className="carousel-p">Year: {selectedMovie.Year}</p>
-            <p className="carousel-p">Rating: {selectedMovie.imdbRating}</p>
-            <p className="carousel-p">{selectedMovie.Plot}</p>
+          <div className="mt-4 lg:mt-0 lg:ml-6 flex flex-col items-center lg:items-start">
+            <h2 className="text-xl font-bold">{selectedMovie.Title}</h2>
+            <p className="text-sm text-gray-500">Year: {selectedMovie.Year}</p>
+            <p className="text-sm text-gray-500">Rating: {selectedMovie.imdbRating}</p>
+            <p className="text-sm text-gray-700 text-center lg:text-left">{selectedMovie.Plot}</p>
           </div>
         </div>
       )}
 
-      {/* Display Movie Results */}
-      <div className="movie-results">
+      {/* Movie Grid */}
+      <div className="w-full max-w-3xl grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-4 px-4">
         {movies.length > 0 ? (
-          <ul className='movie-ul'>
-            {movies.map((movie, index) => (
-              <li key={index}>
-                <img
-                  className='movie-img'
-                  src={movie.Poster}
-                  alt={movie.Title}
-                  onClick={() => handlePosterClick(movie)} // Handle poster click
-                />
-                <p className='movie-p'>{movie.Title}</p>
-              </li>
-            ))}
-          </ul>
+          movies.map((movie, index) => (
+            <div key={index} className="flex flex-col items-center">
+              <img
+                className="w-24 h-36 lg:w-32 lg:h-48 rounded-md cursor-pointer transition-transform transform hover:scale-105"
+                src={movie.Poster}
+                alt={movie.Title}
+                onClick={() => handlePosterClick(movie)}
+              />
+              <p className="text-center text-sm text-gray-700 mt-2">{movie.Title}</p>
+            </div>
+          ))
         ) : (
-          <>          <p className='err' >No movies found. Please try again.</p>
-                 
-
-</>
-          
+          <p className="text-center text-red-500 col-span-full">
+            No movies found. Please try again.
+          </p>
         )}
       </div>
     </div>
   );
 };
 
-export default Project ;
+export default Project;
